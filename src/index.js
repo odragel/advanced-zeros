@@ -1,74 +1,82 @@
 module.exports = function getZerosCount(number, base) {
-    var baseObject = new Object();
+  var baseObject = new Object();
 
-    var simpleNumber = 2;
+   var simpleNumber = 2;
     while (base > 1) {
-        while(!isSimpleNumber(simpleNumber)){
-            simpleNumber++;
-        }
+         while(!isSimpleNumber(simpleNumber)){
+             simpleNumber++;
+         }
 
-        if(base % simpleNumber == 0){
-            var tempAmountInBase = 0;
-            do {
-                tempAmountInBase++;
-                base = base / simpleNumber;
-            } while(base % simpleNumber == 0)
+         if(base % simpleNumber == 0){
+             var tempAmountInBase = 0;
+             do {
+                 tempAmountInBase++;
+                 base = base / simpleNumber;
+             } while(base % simpleNumber == 0)
 
             baseObject[simpleNumber] = tempAmountInBase;
-        }
-        simpleNumber++;
-    }
 
-    var resultArray=[];
-
-    for(key in baseObject){
-        var numberKey = number;
-        var amountKey = 0;
-        var tempKey=+key;
-
-        while(numberKey >= tempKey){
-            if(numberKey % tempKey == 0){
-                var tempNumber = numberKey;
-
-                do{
-                    amountKey++;
-                    tempNumber = tempNumber / tempKey;
-
-                } while(tempNumber % tempKey == 0)
-
-                numberKey= numberKey-tempKey;
-
-            }else{
-                numberKey--;
-            }
-        }
-         resultArray.push(Math.floor(amountKey/baseObject[key]));
-
-    }
-
-    resultArray.sort(function(a,b){return a - b;})
+         }
+         simpleNumber++;
+     }
 
 
-    function isSimpleNumber(number){
-        if(number > 2){
-            divider = number - 1;
+     var resultArray=[];
 
-            while(divider >= 2 ){
-                if (number % divider == 0){
-                    return false;
-                }
-                divider--;
-            }
-            return true;
-        } else if (number == 2){
-            return true;
-        } else{
-            return false;
-        }
+     var numberObject= new Object();
+     for(key in baseObject){
+         var tempKey = +key;
+         var numberKey = Math.floor(number/tempKey)*tempKey;
+         var amountKey = 0;
 
-    }
+          //divided first time
+         var rest = numberKey/ tempKey; //first rest
+         do{
+             amountKey++;
+
+             var tempNumber = rest;
+             while (tempNumber % tempKey == 0) {
+                 amountKey++
+                 tempNumber = tempNumber / tempKey;
+             }
+
+              rest--;
+         }while(rest >=1 )
+
+       numberObject[key]= amountKey;
+
+     }
 
 
+     var resultArray=[];
+     for(key in baseObject){
+         resultArray.push(Math.floor(numberObject[key]/baseObject[key]));
+     }
 
-    return resultArray[0];
+     resultArray.sort(function(a,b){return a - b;});
+
+
+     function isSimpleNumber(number){
+       if(number > 2){
+             var divider = number - 1;
+
+             while(divider >= 2 ){
+                 if (number % divider == 0){
+                     return false;
+                 }
+                 divider--;
+             }
+             return true;
+         } else if (number == 2){
+             return true;
+         } else{
+             return false;
+         }
+
+     }
+
+
+     return resultArray[0];
+
+
 }
