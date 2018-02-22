@@ -1,5 +1,6 @@
 module.exports = function getZerosCount(number, base) {
-  var baseObject = new Object();
+  var baseObject = {};
+  var min = number;
 
    var simpleNumber = 2;
     while (base > 1) {
@@ -11,7 +12,7 @@ module.exports = function getZerosCount(number, base) {
              var tempAmountInBase = 0;
              do {
                  tempAmountInBase++;
-                 base = base / simpleNumber;
+                 base /= simpleNumber;
              } while(base % simpleNumber == 0)
 
             baseObject[simpleNumber] = tempAmountInBase;
@@ -21,39 +22,29 @@ module.exports = function getZerosCount(number, base) {
      }
 
 
-     var resultArray=[];
-
-     var numberObject= new Object();
      for(key in baseObject){
-         var tempKey = +key;
+         var tempKey = Number(key);
          var numberKey = Math.floor(number/tempKey)*tempKey;
-         var amountKey = 0;
 
           //divided first time
          var rest = numberKey/ tempKey; //first rest
-         do{
-             amountKey++;
+         var amountKey=rest;
 
+         do {
              var tempNumber = rest;
              while (tempNumber % tempKey == 0) {
                  amountKey++
-                 tempNumber = tempNumber / tempKey;
+                 tempNumber /= tempKey;
              }
-
               rest--;
-         }while(rest >=1 )
+         }while(rest >= tempKey)
 
-       numberObject[key]= amountKey;
+         var tempValue = Math.floor(amountKey/baseObject[key]);
+         if(min > tempValue){
+             min = tempValue;
+         }
 
-     }
-
-
-     var resultArray=[];
-     for(key in baseObject){
-         resultArray.push(Math.floor(numberObject[key]/baseObject[key]));
-     }
-
-     resultArray.sort(function(a,b){return a - b;});
+    }
 
 
      function isSimpleNumber(number){
@@ -76,7 +67,8 @@ module.exports = function getZerosCount(number, base) {
      }
 
 
-     return resultArray[0];
+    // return resultArray[0];
+    return min;
 
 
 }
